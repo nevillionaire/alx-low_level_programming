@@ -1,54 +1,91 @@
 #include "main.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 /**
- * simple_print_buffer - prints buffer in hexa
- * @buffer: the address of memory to print
- * @size: the size of the memory to print
- *
- * Return: Nothing.
- */
-void simple_print_buffer(char *buffer, unsigned int size)
-{
-  unsigned int i;
+ * _puts - prints a string, followed by a new line,
+ * @str: pointer to the string to print
+ * Return: void
+*/
 
-  i = 0;
-  while (i < size)
-    {
-      if (i % 10)
-        {
-	  printf(" ");
-        }
-      if (!(i % 10) && i)
-        {
-	  printf("\n");
-        }
-      printf("0x%02x", buffer[i]);
-      i++;
-    }
-  printf("\n");
+
+void _puts(char *str)
+{
+int i = 0;
+while (str[i])
+{
+	_putchar(str[i]);
+	i++;
+}
+
 }
 
 /**
- * main - check the code for Holberton School students.
- *
- * Return: Always 0.
+ * _atoi - convert a string to an integer.
+ * @s: char type string
+ * Return: integer converted
  */
-int main(void)
-{
-  char *p;
-  int i;
 
-  p = malloc(sizeof(char) * 10);
-  p = _realloc(p, sizeof(char) * 10, sizeof(char) * 98);
-  i = 0;
-  while (i < 98)
-    {
-      p[i++] = 98;
-    }
-  simple_print_buffer(p, 98);
-  free(p);
-  return (0);
+int _atoi(const char *s)
+{
+    int sign = 1;
+	unsigned long int resp = 0, firstNum, i;
+
+	for (firstNum = 0; !(s[firstNum] >= 48 && s[firstNum] <= 57); firstNum++)
+	{
+		if (s[firstNum] == '-')
+		{
+			sign *= -1;
+		}
+	}
+
+	for (i = firstNum; s[i] >= 48 && s[i] <= 57; i++)
+	{
+		resp *= 10;
+		resp += (s[i] - 48);
+	}
+
+	return (sign * resp);
+}
+
+/**
+ * print_int - prints an integer.
+ * @n: int
+ * Return: 0
+ */
+
+void print_int(unsigned long int n)
+{
+
+unsigned  long int divisor = 1, i, resp;
+
+for (i = 0; n / divisor > 9; i++, divisor *= 10)
+;
+
+for (; divisor >= 1; n %= divisor, divisor /= 10)
+{
+	resp = n / divisor;
+	_putchar('0' + resp);
+}
+
+}
+
+/**
+ * main - print the result of the multiplication, followed by a new line
+ * @argc: int
+ * @argv: list
+ * Return: 0
+ */
+
+int main(int argc, char const *argv[])
+{
+(void)argc;
+
+if (argc != 3)
+{
+	_puts("Error ");
+	exit(98);
+}
+print_int(_atoi(argv[1]) * _atoi(argv[2]));
+_putchar('\n');
+
+return (0);
 }
