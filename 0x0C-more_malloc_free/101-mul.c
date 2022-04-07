@@ -1,50 +1,99 @@
 #include "main.h"
-#include <stdlib.h>
+
+int _strlen(char *s);
+int _toint(char *s);
+/**
+ * main - multiplies two numbers
+ * @argc: number of arguments
+ * @argv: array of pointers to string arguments
+ *
+ * Return: always 0 for success
+ */
+
+int main(int argc, char *argv[])
+{
+	long int num1, num2;
+
+	if (argc != 3)
+	{
+		printf("Error\n");
+		exit(98);
+	}
+	if (_toint(argv[1]) == 0)
+	{
+		printf("Error\n");
+		exit(98);
+	}
+	if (_toint(argv[2]) == 0)
+	{
+		printf("Error\n");
+		exit(98);
+	}
+
+	if (*argv[1] == 48)
+		num1 = 0;
+	else
+		num1 = _toint(argv[1]);
+	if (*argv[2] == 48)
+		num2 = 0;
+	else
+		num2 = _toint(argv[2]);
+	printf("%ld\n", num1 * num2);
+	return (0);
+}
 
 /**
- * strtow - A function that splits a string into words
- * @str: An input pointer of the string to split
- * Return: Apointer to concatened strings or NULL if it str is NULL
+ * _strlen - prints out the length of the specified string
+ * @s: string which length is to be calculated
+ *
+ * Return: the length of the string (int)
  */
-char **strtow(char *str)
-{
-	char **array;
-	int i = 0, j, m, k = 0, len = 0, count = 0;
 
-	if (str == NULL || *str == '\0')
-		return (NULL);
-	for (; str[i]; i++)
+int _strlen(char *s)
+{
+	int size = 0;
+
+	while (*s)
 	{
-		if ((str[i] != ' ' || *str != '\t') &&
-				((str[i + 1] == ' ' || str[i + 1] == '\t') || str[i + 1] == '\n'))
-			count++;
+		size++;
+		s++;
 	}
-	if (count == 0)
-		return (NULL);
-	array = malloc(sizeof(char *) * (count + 1));
-	if (array == NULL)
-		return (NULL);
-	for (i = 0; str[i] != '\0' && k < count; i++)
+	return (size);
+}
+
+/**
+ * _toint - convert str to int
+ * @s: string value
+ *
+ * Return: int value
+ */
+int _toint(char *s)
+{
+	int size, i, isNegative;
+	long int number;
+
+	size = _strlen(s);
+	number = 0;
+	isNegative = 0;
+	for (i = 0; i < size; i++)
 	{
-		if (str[i] != ' ' || str[i] != '\t')
+		if (s[i] == 45)
 		{
-			len = 0;
-			j = i;
-			while ((str[j] != ' ' || str[j] != '\t') && str[j] != '\0')
-				j++, len++;
-			array[k] = malloc((len + 1) * sizeof(char));
-			if (array[k] == NULL)
-			{
-				for (k = k - 1; k >= 0; k++)
-					free(array[k]);
-				free(array);
-				return (NULL);
-			}
-			for (m = 0; m < len; m++, i++)
-				array[k][m] = str[i];
-			array[k++][m] = '\0';
+			isNegative = 1;
+			continue;
+		}
+		else if (s[i] > 47 && s[i] < 58)
+		{
+			number = (number * 10) + (s[i] - 48);
+			/* printf("%dth - %d\n", i, number); */
+		}
+		else
+		{
+			return (0);
 		}
 	}
-	array[k] = NULL;
-	return (array);
+	/* printf("%s => %ld : len - %d\n", s, number, size); */
+	if (isNegative)
+		return (-1 * number);
+	return (number);
 }
